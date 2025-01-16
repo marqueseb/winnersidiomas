@@ -29,7 +29,7 @@ if (isset($_POST['u']) && isset($_POST['p'])) {
         <form method="post">
             <input type="text" name="u" placeholder="Username" required="required" />
             <input type="password" name="p" placeholder="Password" required="required" />
-            <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+            <button type="submit" class="btn btn-primary btn-block btn-large">Entrar.</button>
         </form>
     </div>
 
