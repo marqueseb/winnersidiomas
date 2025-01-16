@@ -218,20 +218,50 @@
     });
 
     function validarCPF(input) {
-      const cpf = input.value.replace(/\D/g, '');
-      if (!validaCpf(cpf)) {
-        document.getElementById('cpfErro').style.display = 'block';
-        input.classList.add('is-invalid');
-      } else {
-        document.getElementById('cpfErro').style.display = 'none';
-        input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
-      }
+    const cpf = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+    if (!validaCpf(cpf)) {
+      document.getElementById('cpfErro').style.display = 'block';
+      input.classList.add('is-invalid');
+    } else {
+      document.getElementById('cpfErro').style.display = 'none';
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
+    }
+  }
+
+  function validaCpf(cpf) {
+    cpf = cpf.replace(/\D/g, ''); // Remover qualquer caractere não numérico
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+    let soma = 0;
+    let multiplicador = 10;
+    for (let i = 0; i < 9; i++) {
+      soma += parseInt(cpf.charAt(i)) * multiplicador--;
+    }
+    let primeiroDigito = 11 - (soma % 11);
+    if (primeiroDigito === 10 || primeiroDigito === 11) {
+      primeiroDigito = 0;
+    }
+    if (parseInt(cpf.charAt(9)) !== primeiroDigito) {
+      return false;
     }
 
-    function validaCpf(cpf) {
-      // Implementar validação de CPF
+    soma = 0;
+    multiplicador = 11;
+    for (let i = 0; i < 10; i++) {
+      soma += parseInt(cpf.charAt(i)) * multiplicador--;
     }
+    let segundoDigito = 11 - (soma % 11);
+    if (segundoDigito === 10 || segundoDigito === 11) {
+      segundoDigito = 0;
+    }
+    if (parseInt(cpf.charAt(10)) !== segundoDigito) {
+      return false;
+    }
+
+    return true;
+  }
   </script>
 
 </body>
