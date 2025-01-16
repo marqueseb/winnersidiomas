@@ -1,4 +1,3 @@
-<?php
 session_start();
 
 // Verifica se o usuário está logado como admin
@@ -7,11 +6,16 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit();
 }
 
-include('conexao.php'); // Conexão com o banco de dados
+include('conexao.php'); // Conexão com o banco de dados PostgreSQL
 
 // Consulta para pegar todos os contratos com status 'pendente' ou 'completo'
 $sql = "SELECT * FROM contratos WHERE status IN ('pendente', 'completo')";
-$result = mysqli_query($conn, $sql);
+$result = pg_query($conn, $sql);
+
+if (!$result) {
+    echo "Erro na consulta: " . pg_last_error($conn);
+    exit();
+}
 
 ?>
 
@@ -39,7 +43,7 @@ $result = mysqli_query($conn, $sql);
         <tbody>
             <?php
             // Exibir as linhas de contratos
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = pg_fetch_assoc($result)) {
                 echo "<tr>";
                 echo "<td>" . $row['contrato_id'] . "</td>";
                 echo "<td>" . $row['nome_cliente'] . "</td>";
