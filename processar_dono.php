@@ -1,5 +1,11 @@
 <?php
-// processar_dono.php
+session_start();
+
+// Verifica se o usuário está logado como admin
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header('Location: login.php');
+    exit();
+}
 
 // Captura o contrato_id da URL
 if (isset($_GET['contrato_id'])) {
@@ -8,15 +14,69 @@ if (isset($_GET['contrato_id'])) {
     die("Erro: contrato_id não fornecido.");
 }
 
-// Simulando a verificação do preenchimento da parte do cliente no banco de dados
-// Aqui você deve fazer uma consulta real ao banco de dados para verificar se o cliente preencheu os dados
-$clientePreenchido = true; // Defina isso com base no banco de dados
+// Conexão com o banco de dados
+include('conexao.php');
 
-// Se o cliente não preencheu a parte dele, exibe uma mensagem de erro.
-if (!$clientePreenchido) {
+// Consulta para verificar o status do cliente
+$query = "SELECT * FROM contratos WHERE contrato_id = $1";
+$result = pg_query_params($conn, $query, array($contrato_id));
+$contrato = pg_fetch_assoc($result);
+
+if ($contrato['status'] !== 'completo') {
     die("Erro: A parte do cliente não foi preenchida. O dono precisa aguardar o preenchimento completo.");
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Processa os dados preenchidos pelo dono
+    $inicioAulas = $_POST['inicioAulas'];
+    $duracaoAula = $_POST['duracaoAula'];
+    $modalidade = $_POST['modalidade'];
+    $totalHorasAno = $_POST['totalHorasAno'];
+    $formaPagamento = $_POST['formaPagamento'];
+    $diaVencimento = $_POST['diaVencimento'];
+    $kitMaterial = $_POST['kitMaterial'];
+    $periodoKit = $_POST['periodoKit'];
+    $taxaAdesao = $_POST['taxaAdesao'];
+    $valorKit = $_POST['valorKit'];
+    $valorParcelas = $_POST['valorParcelas'];
+    $dataMatricula = $_POST['dataMatricula'];
+    $quantParcelas = $_POST['quantParcelas'];
+    $periodoContrato = $_POST['periodoContrato'];
+    $nomeAtendente = $_POST['nomeAtendente'];
+
+    // Atualiza o contrato com as informações do dono
+    $updateQuery = "UPDATE contratos 
+                    SET inicioAulas = $1, 
+                        duracaoAula = $2, 
+                        modalidade = $3, 
+                        totalHorasAno = $4, 
+                        formaPagamento = $5, 
+                        diaVencimento = $6, 
+                        kitMaterial = $7, 
+                        periodoKit = $8, 
+                        taxaAdesao = $9, 
+                        valorKit = $10, 
+                        valorParcelas = $11, 
+                        dataMatricula = $12, 
+                        quantParcelas = $13, 
+                        periodoContrato = $14, 
+                        nomeAtendente = $15, 
+                        status = 'completo' 
+                    WHERE contrato_id = $16";
+
+    // Execução da consulta com parâmetros
+    $result = pg_query_params($conn, $updateQuery, array(
+        $inicioAulas, $duracaoAula, $modalidade, $totalHorasAno, 
+        $formaPagamento, $diaVencimento, $kitMaterial, $periodoKit, 
+        $taxaAdesao, $valorKit, $valorParcelas, $dataMatricula, 
+        $quantParcelas, $periodoContrato, $nomeAtendente, $contrato_id));
+
+    if ($result) {
+        echo "Contrato preenchido com sucesso!";
+    } else {
+        echo "Erro ao atualizar o contrato: " . pg_last_error($conn);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +154,7 @@ if (!$clientePreenchido) {
 
     <div class="form-container">
       <h2>Informações Sobre o Curso Contratado</h2>
-      <form method="POST" action="processar_contrato_dono.php?contrato_id=<?php echo $contrato_id; ?>">
+      <form method="POST" action="processar_dono.php?contrato_id=<?php echo $contrato_id; ?>">
         <!-- Início das Aulas -->
         <div class="form-section">
           <div class="mb-3">
