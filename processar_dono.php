@@ -8,6 +8,15 @@ if (isset($_GET['contrato_id'])) {
     die("Erro: contrato_id não fornecido.");
 }
 
+// Simulando a verificação do preenchimento da parte do cliente no banco de dados
+// Aqui você deve fazer uma consulta real ao banco de dados para verificar se o cliente preencheu os dados
+$clientePreenchido = true; // Defina isso com base no banco de dados
+
+// Se o cliente não preencheu a parte dele, exibe uma mensagem de erro.
+if (!$clientePreenchido) {
+    die("Erro: A parte do cliente não foi preenchida. O dono precisa aguardar o preenchimento completo.");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +59,7 @@ if (isset($_GET['contrato_id'])) {
       height: auto;
     }
 
-    .btn{
+    .btn {
       cursor: pointer;
       font-size: 16px;
       padding: 12px 24px;
@@ -69,7 +78,7 @@ if (isset($_GET['contrato_id'])) {
       background-color: rgba(255, 255, 255, 0.3);
       transform: skewX(-45deg);
       transition: all 0.5s ease;
-    }     
+    }
 
     .btn:hover::before {
       left: 100%;
