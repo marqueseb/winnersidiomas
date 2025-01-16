@@ -1,3 +1,4 @@
+<?php
 session_start();
 
 // Verifica se o usuário está logado como admin
@@ -6,7 +7,8 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit();
 }
 
-include('conexao.php'); // Conexão com o banco de dados PostgreSQL
+// Conectar ao banco de dados PostgreSQL
+include('conexao.php'); // Conexão com o banco de dados
 
 // Consulta para pegar todos os contratos com status 'pendente' ou 'completo'
 $sql = "SELECT * FROM contratos WHERE status IN ('pendente', 'completo')";
@@ -16,7 +18,6 @@ if (!$result) {
     echo "Erro na consulta: " . pg_last_error($conn);
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -46,9 +47,9 @@ if (!$result) {
             while ($row = pg_fetch_assoc($result)) {
                 echo "<tr>";
                 echo "<td>" . $row['contrato_id'] . "</td>";
-                echo "<td>" . $row['nome_cliente'] . "</td>";
+                echo "<td>" . $row['nomeatendente'] . "</td>";
                 echo "<td>" . $row['status'] . "</td>";
-                echo "<td>" . $row['data_preenchimento'] . "</td>";
+                echo "<td>" . $row['datamatricula'] . "</td>";
                 // Link para o dono completar o formulário
                 echo "<td><a href='processar_dono.php?contrato_id=" . $row['contrato_id'] . "'>Preencher</a></td>";
                 echo "</tr>";
