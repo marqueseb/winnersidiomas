@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $inicioAulas = $_POST['inicioAulas'];
     $duracaoAula = $_POST['duracaoAula'];
     $modalidade = $_POST['modalidade'];
+    $turno = $_POST['turno'];  // Adicionado o campo turno
     $totalHorasAno = $_POST['totalHorasAno'];
     $formaPagamento = $_POST['formaPagamento'];
     $diaVencimento = $_POST['diaVencimento'];
@@ -44,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $periodoContrato = $_POST['periodoContrato'];
     $nomeAtendente = $_POST['nomeAtendente'];
 
-    // Valida os dados obrigatórios
-    if (empty($inicioAulas) || empty($duracaoAula) || empty($modalidade) || empty($totalHorasAno) || empty($formaPagamento) || empty($diaVencimento)) {
+    // Verifica se todos os campos obrigatórios estão preenchidos
+    if (empty($inicioAulas) || empty($duracaoAula) || empty($modalidade) || empty($turno) || empty($totalHorasAno) || empty($formaPagamento)) {
         echo "<div class='alert alert-danger'>Erro: Todos os campos obrigatórios devem ser preenchidos!</div>";
         exit;
     }
@@ -55,34 +56,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     SET inicioAulas = $1, 
                         duracaoAula = $2, 
                         modalidade = $3, 
-                        totalHorasAno = $4, 
-                        formaPagamento = $5, 
-                        diaVencimento = $6, 
-                        kitMaterial = $7, 
-                        periodoKit = $8, 
-                        taxaAdesao = $9, 
-                        valorKit = $10, 
-                        valorParcelas = $11, 
-                        dataMatricula = $12, 
-                        quantParcelas = $13, 
-                        periodoContrato = $14, 
-                        nomeAtendente = $15, 
-                        status = 'finalizado' 
-                    WHERE contrato_id = $16";
+                        turno = $4,  -- Campo turno
+                        totalHorasAno = $5, 
+                        formaPagamento = $6, 
+                        diaVencimento = $7, 
+                        kitMaterial = $8, 
+                        periodoKit = $9, 
+                        taxaAdesao = $10, 
+                        valorKit = $11, 
+                        valorParcelas = $12, 
+                        dataMatricula = $13, 
+                        quantParcelas = $14, 
+                        periodoContrato = $15, 
+                        nomeAtendente = $16, 
+                        status = 'completo' 
+                    WHERE contrato_id = $17";
 
     // Execução da consulta com parâmetros
     $result = pg_query_params($conn, $updateQuery, array(
-        $inicioAulas, $duracaoAula, $modalidade, $totalHorasAno, 
+        $inicioAulas, $duracaoAula, $modalidade, $turno, $totalHorasAno, 
         $formaPagamento, $diaVencimento, $kitMaterial, $periodoKit, 
         $taxaAdesao, $valorKit, $valorParcelas, $dataMatricula, 
         $quantParcelas, $periodoContrato, $nomeAtendente, $contrato_id));
 
     if ($result) {
-        echo "<div class='alert alert-success'>Contrato preenchido com sucesso!</div>";
-        header("Location: sucesso.php?contrato_id=$contrato_id");
-        exit();
+        echo "Contrato preenchido com sucesso!";
     } else {
-        echo "<div class='alert alert-danger'>Erro ao atualizar o contrato: " . pg_last_error($conn) . "</div>";
+        echo "Erro ao atualizar o contrato: " . pg_last_error($conn);
     }
 }
 ?>
@@ -190,6 +190,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
         </div>
 
+        <!-- Turno -->
+        <div class="form-section">
+          <h4>Escolha o Turno</h4>
+          <div class="mb-3">
+            <select class="form-control" id="turno" name="turno" required>
+              <option value="manha">Manhã</option>
+              <option value="tarde">Tarde</option>
+              <option value="noite">Noite</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Total de Horas por Ano -->
         <div class="form-section">
           <h4>Total de Horas de Curso por Ano</h4>
@@ -210,35 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </select>
           </div>
         </div>
-  
-        <!-- Dia do Vencimento -->
-        <div class="form-section">
-          <h4>Dia do Vencimento</h4>
-          <div class="mb-3">
-            <input type="number" class="form-control" id="diaVencimento" name="diaVencimento" placeholder="Exemplo: 15" required>
-          </div>
-        </div>
-  
-        <!-- Kit Material -->
-        <div class="form-section">
-          <h4>Kit Material Didático</h4>
-          <div class="mb-3">
-            <label>Incluso no Contrato?</label>
-            <div>
-              <input type="radio" id="kitSim" name="kitMaterial" value="sim" class="form-check-input" required>
-              <label for="kitSim" class="form-check-label">Sim</label>
-              <input type="radio" id="kitNao" name="kitMaterial" value="nao" class="form-check-input">
-              <label for="kitNao" class="form-check-label">Não</label>
-            </div>
-          </div>
-        </div>
-  
-        <div class="form-section">
-          <h4>Observações do Contrato</h4>
-          <div class="mb-3">
-            <textarea class="form-control" id="periodoKit" name="periodoKit" rows="3"></textarea>
-          </div>
-        </div>
 
         <!-- Botão Enviar -->
         <div class="mb-3 text-center">
@@ -248,5 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
