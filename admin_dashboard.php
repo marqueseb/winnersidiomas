@@ -47,9 +47,9 @@ if (!$result) {
             while ($row = pg_fetch_assoc($result)) {
                 echo "<tr>";
                 echo "<td>" . $row['contrato_id'] . "</td>";
-                echo "<td>" . $row['nomeatendente'] . "</td>";
+                echo "<td>" . $row['nome_cliente'] . "</td>";
                 echo "<td>" . $row['status'] . "</td>";
-                echo "<td>" . $row['datamatricula'] . "</td>";
+                echo "<td>" . $row['data_preenchimento'] . "</td>";
                 // Link para o dono completar o formulário
                 echo "<td><a href='processar_dono.php?contrato_id=" . $row['contrato_id'] . "'>Preencher</a></td>";
                 echo "</tr>";
