@@ -105,14 +105,107 @@
           </div>
         </div>
 
-        <!-- Restante do formulário -->
+        <!-- Dados do Responsável -->
         <div class="form-section">
           <h4>Dados do Responsável (Financeiro)</h4>
           <div class="mb-3">
             <label for="nomeResponsavel" class="form-label">Nome Completo do Responsável</label>
             <input type="text" class="form-control" id="nomeResponsavel" name="nomeResponsavel" required oninput="validarCampo(this)">
           </div>
-          <!-- Outros campos... -->
+          <div class="mb-3">
+            <label for="grauParentesco" class="form-label">Grau de Parentesco</label>
+            <input type="text" class="form-control" id="grauParentesco" name="grauParentesco" oninput="validarCampo(this)">
+          </div>
+          <div class="mb-3">
+            <label for="profissaoResponsavel" class="form-label">Profissão do Responsável</label>
+            <input type="text" class="form-control" id="profissaoResponsavel" name="profissaoResponsavel" oninput="validarCampo(this)">
+          </div>
+          <div class="mb-3">
+            <label for="cepResponsavel" class="form-label">CEP</label>
+            <input type="text" class="form-control" id="cepResponsavel" name="cepResponsavel" oninput="validarCampo(this)">
+          </div>
+          <div class="mb-3">
+            <label for="enderecoResponsavel" class="form-label">Endereço</label>
+            <input type="text" class="form-control" id="enderecoResponsavel" name="enderecoResponsavel" oninput="validarCampo(this)">
+          </div>
+
+          <!-- CPF -->
+          <div class="mb-3">
+            <label for="cpfResponsavel" class="form-label">CPF do Responsável</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="cpfResponsavel" 
+              name="cpfResponsavel"
+              required 
+              placeholder="000.000.000-00" 
+              maxlength="14" 
+              oninput="validarCampo(this)" 
+              onblur="validarCPF(this)">
+            <div id="cpfErro" class="text-danger" style="display: none;">CPF inválido. Por favor, verifique.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="dataNascimentoResponsavel" class="form-label">Data de Nascimento do Responsável</label>
+            <input type="date" class="form-control" id="dataNascimentoResponsavel" name="dataNascimentoResponsavel" oninput="validarCampo(this)">
+          </div>
+          <div class="mb-3">
+            <label for="telefoneResponsavel" class="form-label">Telefone Celular do Responsável</label>
+            <input type="tel" class="form-control" id="telefoneResponsavel" name="telefoneResponsavel" oninput="validarCampo(this)">
+          </div>
+          <div class="mb-3">
+            <label for="telefoneAluno" class="form-label">Telefone do Aluno</label>
+            <input type="tel" class="form-control" id="telefoneAluno" name="telefoneAluno" oninput="validarCampo(this)">
+          </div>
+
+          <div id="telefoneErro" class="text-danger" style="display: none;">Telefone inválido.</div>
+
+          <!-- Vencimento padrão -->
+          <div class="mb-3">
+            <label for="vencimentoPadrao" class="form-label">Vencimento Padrão</label>
+            <input type="text" class="form-control" id="vencimentoPadrao" name="vencimentoPadrao" value="08" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="alterarVencimento" class="form-label">Deseja alterar o vencimento padrão?</label>
+            <div>
+              <input type="radio" id="alterarSim" name="alterarVencimento" value="sim" class="form-check-input">
+              <label for="alterarSim" class="form-check-label">Sim</label>
+            </div>
+            <div>
+              <input type="radio" id="alterarNao" name="alterarVencimento" value="nao" class="form-check-input" checked>
+              <label for="alterarNao" class="form-check-label">Não</label>
+            </div>
+          </div>
+          <!-- Novo vencimento -->
+          <div class="mb-3">
+            <label for="novoVencimento" class="form-label">Qual seria o melhor dia do vencimento?</label>
+            <input type="number" class="form-control" id="novoVencimento" name="novoVencimento" placeholder="Digite um dia (1 a 31)" min="1" max="31" disabled>
+          </div>
+
+          <!-- Dias do Curso -->
+          <div class="form-section">
+            <h4>Sobre o Curso</h4>
+            <div class="alert alert-warning" role="alert">
+              <strong>Selecione os Dias</strong> - Marque os dias da semana que o curso ocorrerá.
+            </div>
+            <div class="mb-3">
+              <input type="checkbox" id="segunda" name="diasCurso[]" class="form-check-input">
+              <label for="segunda" class="form-check-label">Segunda-feira</label><br>
+              <input type="checkbox" id="terca" name="diasCurso[]" class="form-check-input">
+              <label for="terca" class="form-check-label">Terça-feira</label><br>
+              <input type="checkbox" id="quarta" name="diasCurso[]" class="form-check-input">
+              <label for="quarta" class="form-check-label">Quarta-feira</label><br>
+              <input type="checkbox" id="quinta" name="diasCurso[]" class="form-check-input">
+              <label for="quinta" class="form-check-label">Quinta-feira</label><br>
+              <input type="checkbox" id="sexta" name="diasCurso[]" class="form-check-input">
+              <label for="sexta" class="form-check-label">Sexta-feira</label><br>
+              <input type="checkbox" id="sabado" name="diasCurso[]" class="form-check-input">
+              <label for="sabado" class="form-check-label">Sábado</label><br>
+              <input type="checkbox" id="domingo" name="diasCurso[]" class="form-check-input">
+              <label for="domingo" class="form-check-label">Domingo</label><br>
+            </div>
+          </div>
+
         </div>
 
         <button type="submit" class="btn btn-primary">Enviar</button>
